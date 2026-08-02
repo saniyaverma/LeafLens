@@ -1,0 +1,84 @@
+{% extends "predictor/base.html" %}
+{% load static %}
+
+{% block title %}Diagnosis Result — LeafLens{% endblock %}
+
+{% block content %}
+<div class="result-page-container">
+
+     <section class="result-hero">
+          <div class="hero-eyebrow">
+               <span class="dot"></span>
+               Analysis Complete
+          </div>
+          <h1>Diagnosis Result</h1>
+          <p>Here's what our AI model detected in your leaf image.</p>
+     </section>
+
+     <div class="result-grid">
+
+          <div class="result-image-card">
+               <img src="{{ image_url }}" alt="Uploaded tomato leaf image">
+               <div class="result-image-caption">Uploaded image</div>
+          </div>
+
+          <div class="diagnosis-card">
+               <div class="diagnosis-label">Detected Condition</div>
+               <div class="diagnosis-name">
+                    <span class="status-dot"></span>{{ prediction }}
+               </div>
+
+               <div class="confidence-block">
+                    <div class="confidence-top">
+                         <span>Confidence Score</span>
+                         <span class="confidence-value">{{ confidence }}%</span>
+                    </div>
+                    <div class="progress-track">
+                         <div class="progress-fill" id="confidence-progress" data-confidence="{{ confidence }}"></div>
+                    </div>
+               </div>
+
+               <div class="divider"></div>
+
+               <div class="info-section">
+                    <div class="info-heading">
+                         <svg viewBox="0 0 24 24" fill="none">
+                              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" />
+                              <path d="M12 8v5M12 16h.01" stroke="currentColor" stroke-width="1.6"
+                                   stroke-linecap="round" />
+                         </svg>
+                         Description
+                    </div>
+                    <p class="info-text">{{ description }}</p>
+               </div>
+
+               <div class="info-section">
+                    <div class="info-heading">
+                         <svg viewBox="0 0 24 24" fill="none">
+                              <path d="M12 21s-7-4.5-9-9a5 5 0 019-3 5 5 0 019 3c-2 4.5-9 9-9 9z" stroke="currentColor"
+                                   stroke-width="1.6" stroke-linejoin="round" />
+                         </svg>
+                         Treatment Recommendations
+                    </div>
+                    <p class="info-text">{{ treatment }}</p>
+               </div>
+          </div>
+
+     </div>
+
+     <div class="result-actions">
+          <a href="{% url 'index' %}" class="btn-secondary">
+               <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M12 5v14M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round" transform="rotate(-90 12 12)" />
+               </svg>
+               Analyze Another Image
+          </a>
+     </div>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'predictor/js/main.js' %}"></script>
+{% endblock %}

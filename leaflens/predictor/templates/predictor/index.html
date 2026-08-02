@@ -1,0 +1,111 @@
+{% extends "predictor/base.html" %}
+{% load static %}
+
+{% block title %}LeafLens — AI Plant Health Assistant{% endblock %}
+
+{% block content %}
+<div class="container">
+     <section class="hero">
+          <div class="hero-eyebrow">
+               <span class="dot"></span>
+               AI-Powered Diagnosis
+          </div>
+          <h1>LeafLens</h1>
+          <p class="subtitle">
+               Upload a photo of a tomato leaf and get an instant, AI-powered diagnosis
+               backed by deep learning - trained to recognize disease patterns with
+               clinical-grade precision.
+          </p>
+
+          <!-- <div class="badge-row">
+               <span class="badge">
+                    <svg viewBox="0 0 24 24" fill="none">
+                         <path d="M12 2l9 4.5v11L12 22l-9-4.5v-11L12 2z" stroke="currentColor" stroke-width="1.5"
+                              stroke-linejoin="round" />
+                    </svg>
+                    TensorFlow
+               </span>
+               <span class="badge">
+                    <svg viewBox="0 0 24 24" fill="none">
+                         <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5" />
+                         <path d="M12 7v5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                    GoogLeNet
+               </span>
+               <span class="badge badge-accent">
+                    <svg viewBox="0 0 24 24" fill="none">
+                         <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                              stroke-linejoin="round" />
+                    </svg>
+                    99.28% Accuracy
+               </span>
+          </div> -->
+     </section>
+
+     <section class="card">
+          <form id="upload-form" method="post" enctype="multipart/form-data" action="{% url 'predict' %}">
+               {% csrf_token %}
+
+               <div class="upload-zone" id="upload-zone">
+                    <div class="upload-icon-circle">
+                         <svg viewBox="0 0 24 24" fill="none">
+                              <path d="M12 16V4M12 4l-4 4M12 4l4 4" stroke="currentColor" stroke-width="1.8"
+                                   stroke-linecap="round" stroke-linejoin="round" />
+                              <path d="M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3" stroke="currentColor" stroke-width="1.8"
+                                   stroke-linecap="round" stroke-linejoin="round" />
+                         </svg>
+                    </div>
+                    <div class="upload-title">Drag &amp; drop your leaf image</div>
+                    <div class="upload-subtitle">or click below to browse your files</div>
+                    <label class="browse-btn" for="image">
+                         <!-- <svg viewBox="0 0 24 24" fill="none"> -->
+                         <path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="1.8"
+                              stroke-linecap="round" />
+                         <!-- </svg> -->
+                         Browse
+                    </label>
+                    <input class="upload-input" type="file" id="image" name="image"
+                         accept="image/png, image/jpeg, image/jpg" required>
+                    <div class="upload-formats">Supports JPG, PNG &bull; Max 10MB</div>
+               </div>
+
+               <div class="preview-wrap" id="preview-wrap">
+                    <div class="preview-header">
+                         <span class="preview-filename" id="preview-filename">
+                              <svg viewBox="0 0 24 24" fill="none">
+                                   <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                              </svg>
+                              <span id="filename-text">image.jpg</span>
+                         </span>
+                         <button type="button" class="remove-btn" id="remove-btn">Remove</button>
+                    </div>
+                    <div class="preview-image-box">
+                         <img id="preview-image" src="" alt="Preview of uploaded leaf">
+                    </div>
+               </div>
+
+               <div class="cta-row">
+                    <button type="submit" class="btn-primary" id="analyze-btn" disabled>
+                         <span class="btn-label">
+                              Analyze Leaf
+                              <svg viewBox="0 0 24 24" fill="none">
+                                   <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                              </svg>
+                         </span>
+                         <span class="btn-loading">
+                              <span class="spinner"></span>
+                              Analyzing…
+                         </span>
+                    </button>
+               </div>
+          </form>
+     </section>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'predictor/js/main.js' %}"></script>
+{% endblock %}
