@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: leaflens
+    runtime: python
+
+    rootDir: leaflens
+
+    buildCommand: |
+      chmod +x build.sh
+      ./build.sh
+
+    startCommand: gunicorn leaflens.wsgi:application
+
+    envVars:
+      - key: DEBUG
+        value: "False"
+
+      - key: SECRET_KEY
+        generateValue: true
