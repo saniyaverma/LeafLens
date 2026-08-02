@@ -1,4 +1,5 @@
 import os
+import base64
 
 from django.conf import settings
 from django.shortcuts import render
@@ -16,8 +17,9 @@ DISPLAY_NAMES = {
     "Tomato___Target_Spot": "Target Spot",
     "Tomato___Tomato_Yellow_Leaf_Curl_Virus": "Tomato Yellow Leaf Curl Virus",
     "Tomato___Tomato_mosaic_virus": "Tomato Mosaic Virus",
-    "Tomato___healthy": "Healthy Leaf"
+    "Tomato___healthy": "Healthy Leaf",
 }
+
 
 def index(request):
     return render(request, "predictor/index.html")
@@ -29,7 +31,21 @@ def predict(request):
 
         image = request.FILES["image"]
 
-        # Create media directory if it doesn't exist
+        # -----------------------------
+        # Convert uploaded image to Base64
+        # -----------------------------
+        image_bytes = image.read()
+
+        image_base64 = base64.b64encode(image_bytes).decode("utf-8")
+
+        image_data = f"data:{image.content_type};base64,{image_base64}"
+
+        # Reset file pointer so Django can read it again
+        image.seek(0)
+
+        # -----------------------------
+        # Save temporarily for prediction
+        # -----------------------------
         os.makedirs(settings.MEDIA_ROOT, exist_ok=True)
 
         image_path = os.path.join(
@@ -37,15 +53,20 @@ def predict(request):
             image.name
         )
 
-        # Save uploaded image
         with open(image_path, "wb+") as destination:
             for chunk in image.chunks():
                 destination.write(chunk)
 
+        # -----------------------------
         # AI Prediction
+        # -----------------------------
         prediction, confidence = predict_image(image_path)
-        display_name = DISPLAY_NAMES.get(prediction, prediction.replace("Tomato___", "").replace("_", " ").title())
-        
+
+        display_name = DISPLAY_NAMES.get(
+            prediction,
+            prediction.replace("Tomato___", "").replace("_", " ").title()
+        )
+
         info = DISEASE_INFO.get(
             prediction,
             {
@@ -59,7 +80,7 @@ def predict(request):
             "confidence": confidence,
             "description": info["description"],
             "treatment": info["treatment"],
-            "image_url": settings.MEDIA_URL + image.name,
+            "image_url": image_data,
         }
 
         return render(
