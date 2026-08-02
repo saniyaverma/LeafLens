@@ -10,6 +10,9 @@ services:
     startCommand: gunicorn leaflens.wsgi:application
 
     envVars:
+      - key: PYTHON_VERSION
+        value: "3.10.11"
+
       - key: DEBUG
         value: "False"
 
